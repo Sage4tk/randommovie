@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Form, Card } from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
 
 import CardM from "./CardM";
 
 export default function Landing() {
     //card data
     const [data, setData] = useState(null);
-
-    const url = "http://localhost:4000/api/random_movie"
+    //get input data
+    const [inputText, setInputText] = useState()
+    
 
     const fetchMovie = async (num) => {
-        let arrayMovie = [];
-        for (let i = 0; i < num; i++) {
-            try {
-                const res = await fetch(url)
-                const data = await res.json();
-                arrayMovie.push(data);
-            } catch (err) {
-                console.log(err)
-            }
+        let url = "http://localhost:4000/api/random_movie";
+
+        //queries more than 1 movie default is 1
+        if (num) {
+            url = url + `?number=${num}`
         }
-        setData(arrayMovie);
+        
+        try {
+            const res = await fetch(url)
+            const movie = await res.json();
+            setData(movie);
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     //fetch data
     useEffect(() => {
-        fetchMovie(3);
+        fetchMovie(5);
     },[])
+
+
 
     return (
         <Container className="mt-5 p-5">
@@ -35,7 +41,7 @@ export default function Landing() {
             <Form className="border p-4 row align-items-center">
                 <Form.Group className="mb-3">
                     <Form.Label>How many movies?</Form.Label>
-                    <Form.Control type="number" min="1" defaultValue="1"></Form.Control>
+                    <Form.Control type="number" min="1" max="5" defaultValue="1"></Form.Control>
                 </Form.Group>
                 <Button className="btn-warning mx-auto" style={{width:"10rem"}}>Generate a movie</Button>
             </Form>       
