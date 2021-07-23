@@ -41,7 +41,7 @@ export default function Landing() {
     const generateMovie = (e) => {
         e.preventDefault();
         const changeInput = parseInt(inputText.number);
-        console.log(changeInput)
+        fetchMovie(changeInput)
     }
 
     //fetch data
